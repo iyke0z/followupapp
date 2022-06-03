@@ -57,7 +57,7 @@ export default {
 				})				
 			}
 			).catch((err) => {
-				this.message = err.response.data.errors[0][0]
+				this.message = err.response.data.message
 			});
         }
     },
