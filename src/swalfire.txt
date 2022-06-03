@@ -1,0 +1,8 @@
+                swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Student added as Ward to Parent',
+                    customClass: 'swal-wide',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
