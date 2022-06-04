@@ -4,7 +4,7 @@
 			<div class="inner-box" id="card">
 				<div class="card-front">
 					<h2>Followup Login</h2>
-					<center>
+					<center style="color:red">
 						{{ message }}
 					</center>
 						<input type="email" @input="checkInput" v-model="logindata.email" class="input-box" name="email" placeholder="Your Email Id" required> 
@@ -181,6 +181,10 @@ button{
 
 .submit-btn{
 	position:  relative;
+}
+
+.submit-btn:hover{
+	background-color: #333;
 }
 
 .submit-btn::after{
