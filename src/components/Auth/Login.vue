@@ -57,7 +57,11 @@ export default {
 				})				
 			}
 			).catch((err) => {
-				this.message = err.response.data.message
+				if(err.response.data.errors['email']){
+					this.message = err.response.data.errors['email'][0]
+				}else{
+					this.message = err.response.data.errors[0][0]
+				}
 			});
         }
     },
