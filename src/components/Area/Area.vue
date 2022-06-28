@@ -9,86 +9,62 @@
             </div>    
             <center style="margin-top:5%; margin-bottom:2%">
                 <button @click="toggleCrud">
-                    Add New Member <i class="fa fa-plus" aria-hidden="true"></i>
+                    Add New Area <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
             </center>
 
         <section v-if="crud">
             <center>
                 <div class="form-group">
-                    <label>Fullname</label>
-                    <input type="text" placeholder="Input Fullname" @input="checkInput" v-model="member.fullname" >
+                    <label>Area Name</label>
+                    <input type="text" placeholder="Input Area" @input="checkInput" v-model="area.area_name" >
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" placeholder="Input Email" @input="checkInput"  v-model="member.email" >
+                    <label>Latitude</label>
+                    <input type="text" placeholder="Input Latitude" @input="checkInput"  v-model="area.latitude" >
                 </div>
                  <div class="form-group">
-                    <label>Tel</label>
-                    <input type="text" placeholder="Input Tel" @input="checkInput"  v-model="member.tel" >
-                </div>                                             
-                <div class="form-group">                
-                    <label>Interest</label>
-                    <select v-model="member.interest" @change="checkInput" >
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
-                </div>
-                <div class="form-group">                
-                    <label>Area of Residence</label>
-                    <select v-model="member.areaid" @change="checkInput" >
-                        <option value="null"> Select Area of Residence</option>
-                        <option v-for="area in allareas" :key="area" :value="area.id">{{ area.area_name }}</option>                        
-                    </select>
-                </div>
-                <div class="form-group" v-if="updateMode">
-                    <label>Date Joined</label>
-                    <input type="date" @input="checkInput"  v-model="member.date" >
-                </div>
-                <button  @click.prevent=addMember() v-if="!updateMode" :disabled="!filled">Add</button>
+                    <label>Longitude</label>
+                    <input type="text" placeholder="Input Longitude" @input="checkInput"  v-model="area.longitude" >
+                </div>                                                            
+                <button  @click.prevent=addarea() v-if="!updateMode" :disabled="!filled">Add</button>
                 <button  @click.prevent=updateUser() v-if="updateMode">Update</button>                                            
             </center>
         </section>
         <section>
             <center>                
-                <table id="all-members">
+                <table id="all-areas">
                     <thead>
                         <tr>
-                            <th>Fullname</th>
-                            <th>Email</th>
-                            <th>Tel</th>                            
-                            <th>Status</th>                                                        
-                            <th>Date Joined</th> 
-                            <th>Followup Count</th>                           
+                            <th>Area Name</th>
+                            <th>Longitude</th>
+                            <th>Latitude</th>                            
+                            <th>Status</th>                                                                                    
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody :key="tableKey">
-                        <tr v-for="member in allmembers" :key="member" >
+                        <tr v-for="area in allareas" :key="area" >
                             <td>
-                                <center>{{member.fullname}}</center>
+                                <center>{{area.area_name}}</center>
                             </td>
                             <td>
-                                <center>{{member.email}}</center>
+                                <center>{{area.latitude}}</center>
                             </td>
                             <td>
-                                <center>{{member.tel}}</center>
+                                <center>{{area.longitude}}</center>
                             </td>
+                            <td v-if="area.deleted_at == null">
+                                <center><p style="color:green">Active</p></center>
+                            </td>                                                       
+                            <td v-if="area.deleted_at != null">
+                                <center><p style="color:red">Inactive</p></center>
+                            </td>                                                       
                             <td>
-                                <center>{{member.membership_status}}</center>
-                            </td> 
-                            <td>
-                                <center>{{member.date}}</center>
-                            </td> 
-                            <td>
-                                <center>{{member.followup_count}}</center>
-                            </td> 
-                                                      
-                            <td>
-                                <button style="background:red" id="delete" @click="deleteMember(member)">
+                                <button style="background:red" id="delete" @click="deletearea(area)">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                <button id="edit" @click="getMember(member)">
+                                <button id="edit" @click="getarea(area)">
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </td>
@@ -106,9 +82,8 @@
 </template>
 <script>
 import NavBar from '../../Navigation.vue'
-import Member from '../../components/Api/Member'
-import User from '../../components/Api/User'
-import Area from '@/components/Api/Area'
+import Area from '../../components/Api/Area'
+import User from '@/components/Api/User'
 import Swal from 'sweetalert2'
 export default {
     components:{NavBar},
@@ -119,22 +94,18 @@ export default {
             crud:false,
             user:null,
             tableKey:0,
-            member:{
+            area:{
                 id:null,
-                fullname:null,
-                email:null,
-                tel:null,                
-                date:null,
-                interest:1,
-                areaid:null
+                area_name:null,
+                latitude:null,                
+                longitude:null,
             },
-            allareas:null,
-            allmembers:null
+            allareas:null
         }
     },    
     methods: {
         checkInput(){
-            if(this.member.areaid == null || this.member.fullname == null || this.member.email == null || this.member.tel == null || this.member.interest == null){
+            if(this.area.area_name == null || this.area.latitude == null || this.area.longitude == null){
                 this.filled = false
             }else{
                 this.filled = true
@@ -142,10 +113,10 @@ export default {
         },
         toggleCrud(){
             this.crud = !this.crud
-            this.member.id = null
-            this.member.fullname = null
-            this.member.email = null
-            this.member.tel = null            
+            this.area.id = null
+            this.area.area_name = null
+            this.area.latitude = null
+            this.area.longitude = null            
         },
         toggleMenu(){
             let toggle = document.querySelector('.toggle');            
@@ -155,26 +126,25 @@ export default {
 			toggle.classList.toggle('active')
 			main.classList.toggle('active')			
 		}, 
-        datatable(){            
+        datatable(){ 
             $(function() {
-                 $('#all-members').DataTable({                    
+                 $('#all-areas').DataTable({                    
                     "bDestroy": true,
                     pageLength: 5,
-                    lengthMenu: [[5,10,20], [5, 10, 20]],
-                    
+                    lengthMenu: [[5,10,20], [5, 10, 20]],                    
                 });
             });
         },
-        allMembers(){
-            Member.allMembers().then((result) => {
-                this.allmembers = result.data   
+        allarea(){
+            Area.allAreas().then((result) => {
+                this.allareas = result.data   
                 this.tableKey++               
                 this.datatable()                                 
             })
         }, 
-        addMember(){
-            Member.createMember(this.member).then((result) => {
-                  this.allMembers()
+        addarea(){
+            Area.createArea(this.area).then((result) => {
+                  this.allarea()
                   this.toggleCrud()
                   Swal.fire({
                     position: 'top-end',
@@ -195,9 +165,9 @@ export default {
                 })
             });
         },
-        deleteMember(member){
-             Member.deleteMember(member).then((result) => {                 
-                  this.allMembers()
+        deletearea(area){
+             Area.deleteArea(area).then((result) => {                 
+                  this.allarea()
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -217,18 +187,17 @@ export default {
                 })
             });
         },
-        getMember(member){
-            this.member.id = member.id
-            this.member.fullname = member.fullname
-            this.member.email = member.email
-            this.member.tel = member.tel                        
-            this.member.date= member.date
+        getarea(area){
+            this.area.id = area.id
+            this.area.area_name = area.area_name            
+            this.area.latitude = area.latitude                        
+            this.area.longitude= area.longitude
             this.updateMode = true
             this.crud = true
         },
         updateUser(){
-            Member.updateMember(this.member).then((result) => {
-                this.allMembers()
+            Area.updateArea(this.area).then((result) => {
+                this.allarea()
                 this.toggleCrud()
                   Swal.fire({
                     position: 'top-end',
@@ -249,18 +218,10 @@ export default {
                 })
             });
         },
-        allarea(){
-            Area.allAreas().then((result) => {
-                this.allareas = result.data   
-                this.tableKey++               
-                this.datatable()                                 
-            })
-        }, 
         getAuth(){
-            User.auth().then((result)=>{                
+            User.auth().then((result)=>{                            
                 this.user = result.data 
                 this.allarea()
-                this.allMembers()
             }).catch(()=>{
 				this.$router.push('/')
 			})

@@ -8,7 +8,7 @@
 						{{ message }}
 					</center>
 						<input type="email" @input="checkInput" v-model="logindata.email" class="input-box" name="email" placeholder="Your Email Id" required> 
-						<input type="password" @input="checkInput" v-model="logindata.password" class="input-box" name="password" placeholder="Your Password" required>
+						<input type="password" @input="checkInput" @keyup.enter="login" v-model="logindata.password" class="input-box" name="password" placeholder="Your Password" required>
 
 						<button class="submit-btn" :disabled="!filled"  @click="login">Submit</button>
 						<center v-if='!filled'>

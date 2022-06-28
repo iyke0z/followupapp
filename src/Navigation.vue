@@ -53,7 +53,13 @@
 						<span class="title">Assign Members</span>
 					</router-link>				
 				</li>
-				<!-- <li>
+				<li>
+					<router-link active-class="activeLink" to="/area">					
+						<span class="icon"><i class="fa fa-map-marker"></i></span>
+						<span class="title">Area</span>
+					</router-link>				
+				</li> 
+				<!--<li>
 					<router-link active-class="activeLink" to="/sms">					
 						<span class="icon"><i class="fa fa-comment"></i></span>
 						<span class="title">Sms New Members</span>
@@ -65,6 +71,12 @@
 						<span class="title">Reports</span>
 					</router-link>
 				</li>-->
+				<li>
+					<router-link active-class="activeLink" to="/heatmap">
+						<span class="icon"><i class="fa fa-map"></i></span>
+						<span class="title">Heat Map</span>
+					</router-link>
+				</li>
 				<li>
 					<router-link to="" @click="logout">
 						<span class="icon" ><i style="color:red" class="fa fa-power-off"></i></span>

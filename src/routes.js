@@ -8,6 +8,8 @@ import Users from './components/User/User.vue'
 import ViewAssign from './components/Followup/ViewAssigned.vue'
 import Report from './components/reports/Index.vue'
 import Response from './components/Response/Response.vue'
+import HeatMap from './components/HeatMap/heatmap.vue'
+import Area from './components/Area/Area.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -21,6 +23,8 @@ const router = createRouter({
         {path:'/report', name:'report', component: Report},
         {path:'/response', name:'response', component: Response},
         {path:'/sms', name:'sendsms', component: SendSMS},
+        {path:'/heatmap', name:'heatmap', component: HeatMap},
+        {path:'/area', name:'area', component: Area},
         
     ]
 })
