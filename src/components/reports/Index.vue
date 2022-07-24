@@ -1,27 +1,25 @@
 <template>
     <div class="container">   
         <nav-bar />
-      <div class="main">
-         <div class="topbar">
-            <div class="toggle" @click="toggleMenu"></div>				
-			<h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>            
-				</div>     
-            <div>
-               
-               
-                <div>
-                    
-						<center>
+      <div class="main">  
+		<center>
+		 	<div class="loading" v-if="isLoading">
+                <loading />
+        	</div>
+		</center>  
+            <div>                             
+                <div>                    
+					<center>
                     	<br><br>
 						<b>Select Report Type</b><br>
-						<select name="" id="" v-model="selectedreport" @change="clearPeriod">
-							<option value="">select report type</option>
-							<option value="daily">Daily Report</option>
-							<option value="weekly">Weekly Report</option>
-							<option value="monthly">Monthly Report</option>
-							<option value="yearly">Yearly Report</option>
-							<option value="periodic">Periodic Report</option>
+						<select name="" id="" v-model="selectedperiod" @change="clearPeriod">
+							<option :value="{data:null, title:null}">select report type</option>
+							<option :value="{data:'highestcalls', title:'Worker With Most Calls'}">Worker With Most Calls</option>
+							<option :value="{data:'highestpositive', title:'Worker with most Positive Response'}">Worker with most Positive Response</option>
+							<option :value="{data:'highestnegative', title:'Worker with most Negative Response'}">Worker with most Negative Response</option>
+							<option :value="{data:'allmembers', title:'All Members Followup History'}">All Members</option>
+							<option :value="{data:'highestarea', title:'Area Record'}">Area Record</option>
+							<option :value="{data:'totalcalls', title:'Total Calls Report'}">Total Calls Report</option>							
 						</select>
 						<input v-model="period" type="date" name="" id="" v-if="selectedreport=='daily'" >
 						<input v-model="period" type="week" @input="getWeek" name="" id="" v-if="selectedreport=='weekly'" >
@@ -29,45 +27,60 @@
 						<input v-model="year" type="number" min="1900" max="2099" step="1" v-if="selectedreport=='yearly'"  ><br>					
 						<div v-if="selectedreport=='periodic'">
 							<small><b>Start Date:</b></small><br>
-							<input v-model="periodicVar.from" type="date" placeholder="Start Date" ><br>					
+							<input v-model="periodicVar.startdate" type="date" placeholder="Start Date" ><br>					
 							<small><b>End Date:</b></small><br>
-							<input v-model="periodicVar.to" type="date" placeholder="End Date" ><br>
+							<input v-model="periodicVar.enddate" type="date" placeholder="End Date" ><br>
 						</div>
 
-						<button @click.prevent="generateReport" :disabled="selectedreport==''">generate report</button>
+						<button :key="btnKey" @click.prevent="generateReport" :disabled="startdate==null && enddate==null">generate report</button>
                     </center>
-
+					<center style="margin-top:10%"><h3>{{selectedperiod.title}}</h3><br /> <small v-if="selectedperiod.title != null"><b>from</b> {{periodicVar.startdate}} <br /> <b>to</b> {{periodicVar.enddate}}</small> </center>
+					<center>
+						<div v-if="report !=null && this.selectedperiod.data == 'totalcalls' ">
+							<h3>Total calls made - {{report}}</h3>
+						</div>
+					</center>
+					<worker-record :key="repKey" :title="selectedperiod.title" :report="report" v-if="report != null && this.selectedperiod.data == 'highestcalls' ||this.selectedperiod.data == 'highestpositive' || this.selectedperiod.data == 'highestnegative'" />
+					<area-record :key="areaKey" :title="selectedperiod.title" :report="area" v-if="area != null"/>
+					<member :key="memberKey" :allmembers="members" v-if="members != null"/>
                 </div>
                 
             </div>    
-			<annual-report v-if="showReport == 'yearly'" />                                          
-			<monthly-report v-if="showReport == 'monthly'" />                                          
-			<weekly-report v-if="showReport == 'weekly'" />                                          
         </div>
 
     </div>
 </template>
-<script>
-    import { RouterLink } from 'vue-router'
-	import monthlyReport from './MonthlyReport.vue'
-	import annualReport from './AnnualReport.vue'
-	import weeklyReport from './WeeklyReport.vue'
+<script>    
+	import WorkerRecord from './WorkerRecord.vue'
+	import Member from './Member.vue'
+	import AreaRecord from './AreaRecord.vue'
 	import NavBar from '../../Navigation.vue'
+	import Report from '@/components/Api/Report'
+	import Loading from '@/components/Loading.vue'
 export default {
-	components:{NavBar, monthlyReport, annualReport, weeklyReport},
+	components:{NavBar, WorkerRecord, Member, AreaRecord, Loading},
     data() {
        return {
 		   	showReport:null,
-            selectedreport:'',
+            selectedreport:'periodic',
             period:null,
 			week:null,
 			month:null,
-            year:new Date().getFullYear() ,
+			selectedperiod:{data:null, title:null },            
 			periodicVar:{
-				from:null,
-				to:null
+				startdate:null,
+				enddate:null
 			},
-			msg:null
+			msg:null,
+			isLoading:false,
+			btnKey:0,
+			report:null,
+			area:null,
+			repKey:0,
+			areaKey:0,
+			members:null,
+			memberKey:0
+
 
         }
     },    
@@ -80,112 +93,90 @@ export default {
 			toggle.classList.toggle('active')
 			main.classList.toggle('active')			
 		}, 
+
 		clearPeriod(){
-			this.period = null 
-			this.year = new Date().getFullYear() 
+			this.period = null 			
 			this.week = null
 			this.month = null
-			this.periodicVar.from = null
-			this.periodicVar.to = null
+			this.periodicVar.startdate = null
+			this.periodicVar.enddate = null
 		},
-		getWeek(){
-			var week = this.period			
-			var year = this.period
-			year = year.substr(0, 4)		
-			week = week.substr(6)
-			this.week = week
-			this.year = year
-		},
-		getMonth(){
-			var month = this.period
-			var year = this.period
-			year = year.substr(0, 4)
-			month = month.substr(5)
-			this.year = year
-			this.month = month
-		},
+		
 		generateReport(){
-			if(this.selectedreport=='daily'){
-				if(this.period == null){
-					this.msg = 'please select period'
-					swal.fire({
-						position: 'top-end',
-						icon: 'warning',
-						title: this.msg,
-						customClass: 'swal-wide',
-						showConfirmButton: false,
-						timer: 3000
-                	})
-				}else{
-					// api
-				}
+			this.isLoading = true
+			if(this.selectedperiod.data == 'highestcalls'){
+				Report.highestcalls(this.periodicVar).then((result) => {
+
+					this.report = result.data.data					
+					this.repKey++
+					this.isLoading = false
+				})
 			}
-			if(this.selectedreport=='weekly'){				
-				if(this.period == null){
-					this.msg = 'please select period'
-					swal.fire({
-						position: 'top-end',
-						icon: 'warning',
-						title: this.msg,
-						customClass: 'swal-wide',
-						showConfirmButton: false,
-						timer: 3000
-                	})
-				}else{
-					// api
-					this.showReport = 'weekly'
-				}
+			if(this.selectedperiod.data == "highestpositive"){
+				Report.highestpositive(this.periodicVar).then((result) => {
+					this.repKey++
+					this.report = result.data.data				
+					this.isLoading = false	
+				})
 			}
-			if(this.selectedreport=='monthly'){
-				if(this.period == null){
-					this.msg = 'please select period'					
-					swal.fire({
-						position: 'top-end',
-						icon: 'warning',
-						title: this.msg,
-						customClass: 'swal-wide',
-						showConfirmButton: false,
-						timer: 3000
-                	})
-				}else{
-					// api
-					this.showReport = 'monthly'
-				}
+			if(this.selectedperiod.data == "highestnegative"){
+				Report.highestnegative(this.periodicVar).then((result) => {
+					this.repKey++
+					this.report = result.data.data	
+					this.isLoading = false				
+				})
 			}
-			if(this.selectedreport=='yearly'){
-				if(this.year == null){
-					this.msg = 'please choose year'
-					swal.fire({
-						position: 'top-end',
-						icon: 'warning',
-						title: this.msg,
-						customClass: 'swal-wide',
-						showConfirmButton: false,
-						timer: 3000
-                	})
-				}else{
-					// 
-					this.showReport = 'yearly'
-				}
+			if(this.selectedperiod.data == "allmembers"){
+				Report.all_members(this.periodicVar).then((result) => {
+					this.members = result.data.data.members	
+					this.isLoading = false				
+				})
 			}
-			if(this.selectedreport=='periodic'){				
-				if(this.periodicVar.from == null || this.periodicVar.to == null){
-					this.msg = 'please select start and end date'
-					swal.fire({
-						position: 'top-end',
-						icon: 'warning',
-						title: this.msg,
-						customClass: 'swal-wide',
-						showConfirmButton: false,
-						timer: 3000
-                	})
-				}else{
-					// api
-				}
-			}			
+			if(this.selectedperiod.data == "highestarea"){
+				Report.highestarea(this.periodicVar).then((result) => {
+					this.area = result.data.data					
+					this.areaKey++
+					this.isLoading = false
+				})
+			}
+			if(this.selectedperiod.data == "totalcalls"){
+				Report.totalcalls(this.periodicVar).then((result) => {
+					this.report = result.data.data	
+					this.isLoading = false				
+				})
+			}
+
 		}
 
     },
+
+	computed:{
+		startdate(){
+			return this.periodicVar.startdate
+		},
+
+		enddate(){
+			return this.periodicVar.enddate
+		},
+
+		data(){
+			return this.selectedperiod.data
+		}
+	},
+	watch:{
+		startdate(){
+			this.btnKey++
+		},
+		enddate(){
+			this.btnKey++
+		},
+		data(){
+			this.area = null
+			this.members= null
+			this.report = null
+		}
+		
+	}
   
 }
 </script>

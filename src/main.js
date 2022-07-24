@@ -5,15 +5,15 @@ import Swal from 'sweetalert2'
 import 'jquery/dist/jquery.min.js'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import $ from 'jquery'
+
 import 'datatables.net-dt/js/dataTables.dataTables'
 import 'datatables.net-dt/css/jquery.dataTables.min.css'
-// import '../node_modules/fortawesome/fontawesome-free/css/all.min.css'
-
+import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css'
 window.Vue = require('vue').default;
 window.swal = Swal
 window.$ = $
 
 createApp(App)
-.use(router)
-.use($)
-.mount('#app')
+    .use(router)
+    .use($)
+    .mount('#app')

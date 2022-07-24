@@ -1,12 +1,9 @@
 <template>
     <div class="container">   
         <nav-bar />
+       
         <div class="main">
-         <div class="topbar">
-            <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>    
+             
             <center style="margin-top:5%; margin-bottom:2%">
                 <button @click="toggleCrud">
                     Add New Area <i class="fa fa-plus" aria-hidden="true"></i>
@@ -32,7 +29,9 @@
             </center>
         </section>
         <section>
-            <center>                
+            <center>        
+                <div class="tableDiv">
+        
                 <table id="all-areas">
                     <thead>
                         <tr>
@@ -71,6 +70,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </center>
 
         </section>                                      
@@ -118,14 +118,7 @@ export default {
             this.area.latitude = null
             this.area.longitude = null            
         },
-        toggleMenu(){
-            let toggle = document.querySelector('.toggle');            
-			let navigation = document.querySelector('.navigation')
-			let main = document.querySelector('.main')            
-			navigation.classList.toggle('active')
-			toggle.classList.toggle('active')
-			main.classList.toggle('active')			
-		}, 
+        
         datatable(){ 
             $(function() {
                  $('#all-areas').DataTable({                    

@@ -1,476 +1,509 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,900&display=swap');
-
-*{
-	margin:  0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Poppins', sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.form-group{
-	display: block;	
+.form-group {
+    display: block;
 }
 
-input, select, textarea{
-	padding: 10px;
-	border-radius: 20px;
-	border: .5px solid #7777;
-	display: block;
-	margin-bottom: 15px;
-	width: 40%;
+div#all-response_info {
+    margin-left: 2%;
 }
 
-div.dataTables_filter{
-	margin-right: 20px;
+input,
+select,
+textarea {
+    padding: 10px;
+    border-radius: 20px;
+    border: .5px solid #7777;
+    display: block;
+    margin-bottom: 15px;
+    width: 40%;
 }
 
-div.dataTables_length{
-	margin-left: 20px;
+div.dataTables_filter {
+    margin-right: 20px;
 }
-div.dataTables_filter label {    
+
+div.dataTables_length {
+    margin-left: 20px;
+}
+
+div.dataTables_filter label {
     text-align: left;
     clear: both;
-    float:right;
-    margin-left:15px;
+    float: right;
+    margin-left: 15px;
 }
-div.dataTables_length label {    
+
+div.dataTables_length label {
     text-align: right;
     clear: both;
-    float:left;
-    margin-right:15px;
-}
-div.dataTables_length select{	
-	width: 100px;
-	text-align: left;
-    float:right; 
-	margin-left: 10px;   
+    float: left;
+    margin-right: 15px;
 }
 
-div.dataTables_filter input{	
-	width: 100px;	            
-}
-::-webkit-scrollbar{
-	background: transparent;
-	display: none;
-}
-
-.container{
-	position: relative;
-	width: 100%;
+div.dataTables_length select {
+    width: 100px;
+    text-align: left;
+    float: right;
+    margin-left: 10px;
 }
 
-.navigation{
-	position: fixed;
-	width: 300px;
-	height: 100%;
-	background: navy;
-	transition: 0.5s;
-	overflow-x: hidden;	
+div.dataTables_filter input {
+    width: 100px;
+}
+
+::-webkit-scrollbar {
+    background: transparent;
+    display: none;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: navy;
+    transition: 0.5s;
+    overflow-x: hidden;
     color: white;
 }
 
-.navigation.active{
-	width: 60px;
+.navigation.active {
+    width: 60px;
 }
 
-.navigation ul{
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
-.navigation ul li{
-	position: relative;
-	width: 100%;
-	list-style: none;
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
 }
 
-.activeLink{
-	background: #4355a7;
-	color: black;
-	border: 1px solid white;
+.activeLink {
+    background: #4355a7;
+    color: black;
+    border: 1px solid white;
 }
 
-.navigation ul li:hover{
-	background: #2643e7;
+.navigation ul li:hover {
+    background: #2643e7;
 }
 
-.navigation ul li:nth-child(1){
-	margin-bottom: 5px;
+.navigation ul li:nth-child(1) {
+    margin-bottom: 5px;
 }
 
-.navigation ul li:nth-child(1):hover{
-	background: transparent;
-}
-.navigation ul li a .icon img{
-	object-fit: cover;
-	overflow: hidden;
-	border-radius: 50%;
-	width: 100%;
-	height: 100%;
-	margin-right: 2%;
-}
-.navigation ul li a{
-	position: relative;
-	display: block;
-	width: 100%;
-	color: #fff;
-	display: inline-flex;
-	text-decoration: none;
+.navigation ul li:nth-child(1):hover {
+    background: transparent;
 }
 
-.navigation ul li a .icon{
-	position:  relative;
-	display: block;
-	min-width: 60px;
-	max-width: 60px;
-	height: 60px ;
-	line-height: 60px;
-	text-align: center;
-}
-.icon .logo{
-	height: 100%;
-	width: 100%;
-}
-.navigation ul li a .icon .fa{
-	color: #fff;
-	font-size: 24px;
+.navigation ul li a .icon img {
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    margin-right: 2%;
 }
 
-.navigation ul li a .title{
-	position:  relative;
-	display: block;
-	padding: 0 10px;
-	height: 60px ;
-	line-height: 60px;
-	white-space: nowrap;
+.navigation ul li a {
+    position: relative;
+    display: block;
+    width: 100%;
+    color: #fff;
+    display: inline-flex;
+    text-decoration: none;
 }
 
-.main{
-	position: absolute;
-	width: calc(100% - 300px);
-	left: 300px;    
-	min-height: 100vh;
-	background: #f5f5f5;
-	transition: 0.5s;    	
+.navigation ul li a .icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    max-width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
 }
-.main .content{
+
+.icon .logo {
+    height: 100%;
+    width: 100%;
+}
+
+.navigation ul li a .icon .fa {
+    color: #fff;
+    font-size: 24px;
+}
+
+.navigation ul li a .title {
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    white-space: nowrap;
+}
+
+.main {
+    position: absolute;
+    width: calc(100% - 300px);
+    left: 300px;
+    min-height: 100vh;
+    background: #f5f5f5;
+    transition: 0.5s;
+}
+
+.main .content {
     margin-top: 5%;
 }
 
-.main h4{
-	text-align: center;
-	font-size: 28px;
-	color: white;	
-	
+.main h4 {
+    text-align: center;
+    font-size: 28px;
+    color: white;
 }
 
-.main h1{
-	text-align: center;
-	font-size: 28px;
+.main h1 {
+    text-align: center;
+    font-size: 28px;
 }
 
-.main .topbar{
-	width: 100%;
-	background: #FAB44D;
-	height: 60px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0 10px;	
+.topbar {
+    width: calc(100% - 300px);
+    background: #FAB44D;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    margin-left: 300px;
 }
 
-.main ul{
+.main ul {
     list-style: none;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.main ul li{
+.main ul li {
     background-color: #062833;
     color: white;
     padding: 10px;
     border-radius: 20%;
-	cursor: pointer;
-	margin: 2%;
-
+    cursor: pointer;
+    margin: 2%;
 }
 
-
-.dataTables_wrapper{
-	margin-bottom: 20px;
+.dataTables_wrapper {
+    margin-bottom: 20px;
 }
 
-table{
-	padding: 20px;
-	width: 900px;	
-	border-collapse: collapse;
-	border: none;	
-	margin-left: 2%;
-	position: relative;				
-	
-}
-table thead{
-	background: #062833;	
-}
-table thead tr th{
-	color: white;
-	padding: 10px;
-	border-right: 1px solid rgb(80, 77, 77);
-	border-bottom: 1px solid black;
-}
-table tbody{
-	background: #fff;	
-}
-table tbody tr{
-	border-bottom: 1px solid black;	
-}
-table tbody tr:last-child{
-	border-bottom: none;
-}
-table tbody tr:hover{
-	background-color: #f1f1eb;
-
+.main .tableDiv {
+    position: relative;
+    overflow: scroll;
+    /* width: 20%; */
 }
 
-table tbody td{
-	padding: 10px;
+.tableDiv table {
+    padding: 20px;
+    border-collapse: collapse;
+    border: none;
+    margin-left: 2%;
+    overflow: scroll;
 }
+
+table thead {
+    background: #062833;
+}
+
+table thead tr th {
+    color: white;
+    padding: 10px;
+    border-right: 1px solid rgb(80, 77, 77);
+    border-bottom: 1px solid black;
+}
+
+table tbody {
+    background: #fff;
+}
+
+table tbody tr {
+    border-bottom: 1px solid black;
+}
+
+table tbody tr:last-child {
+    border-bottom: none;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1eb;
+}
+
+table tbody td {
+    padding: 10px;
+}
+
 table tbody tr td:last-child,
-table thead tr th:last-child{
-	border-right:none ;
+table thead tr th:last-child {
+    border-right: none;
 }
 
-.main ul li:hover{
+.main ul li:hover {
     background-color: white;
     color: black;
-	transition: 0.5s;
+    transition: 0.5s;
 }
 
-
-
-.main ul li:hover{
+.main ul li:hover {
     background-color: white;
     color: black;
-	transition: 0.5s;
+    transition: 0.5s;
 }
 
 .main button {
-	background-color: navy;
-	outline: none;
-	border: none;
-	padding: 10px;	
-	color: white;	
-	cursor: pointer;
-	width: 40%;
-	border-radius: 20px;
-}
-button:disabled{
-	background:red;
-} 
-
-.main button:hover{
-	background-color: #062833;
-	transition: 0.5s;
+    background-color: navy;
+    outline: none;
+    border: none;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    width: 40%;
+    border-radius: 20px;
 }
 
-.toggle{
-	position: relative;
-	width: 60px;
-	height: 60px;
-	cursor: pointer;
-	z-index: 100000px;
+button:disabled {
+    background: red;
 }
 
-.main.active{
-	width: calc(100% - 60px);
-	left: 60px;
+.main button:hover {
+    background-color: #062833;
+    transition: 0.5s;
 }
 
+.toggle {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    z-index: 100000px;
+}
 
-.toggle::before{
-	content: '\f0c9';
-	font-family: fontAwesome;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	line-height: 60px;
-	font-size: 24px;
-	text-align: center;
-	color: white;
+.main.active {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+.topbar.active {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+    /* transition-delay: 2ms; */
+}
+
+.toggle::before {
+    content: '\f0c9';
+    font-family: fontAwesome;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    line-height: 60px;
+    font-size: 24px;
+    text-align: center;
+    color: white;
 }
 
 .vo.active,
 .po.active,
-.co.active{
-	background-color: #03a9f4;
+.co.active {
+    background-color: #03a9f4;
     color: white;
-	font-weight: bold;
+    font-weight: bold;
 }
 
-.view-container{
-	position: relative;	
-	display: flex;
-	width: 100%;	
-	justify-content: flex-start;
-	overflow-x: auto;
-	
+.view-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
 }
 
-.view-container .table{
-	padding: 20px;
-	width: 900px;	
-	border-collapse: collapse;
-	border: none;	
-	margin-left: 2%;
-	position: relative;		
-	
+.view-container .table {
+    padding: 20px;
+    width: 900px;
+    border-collapse: collapse;
+    border: none;
+    margin-left: 2%;
+    position: relative;
 }
 
-.view-container .table thead{
-	background: #062833;	
+.view-container .table thead {
+    background: #062833;
 }
 
-.view-container .table thead tr th{
-	color: white;
-	padding: 10px;
-	border-right: 1px solid rgb(80, 77, 77);
-	border-bottom: 1px solid black;
+.view-container .table thead tr th {
+    color: white;
+    padding: 10px;
+    border-right: 1px solid rgb(80, 77, 77);
+    border-bottom: 1px solid black;
 }
 
-.view-container .table tbody{
-	background: #fff;	
+.view-container .table tbody {
+    background: #fff;
 }
 
-.view-container .table tbody tr td{
-	color: black;
-	padding: 10px;
-	border-right: 1px solid rgb(80, 77, 77);	
-	text-align: center;	
+.myModal {
+    position: absolute;
+    margin-left: 5%;
+    margin-top: -30%;
+    width: 300px;
+    z-index: 100000000000000000000000000000000000;
+    /* border: 1px solid black; */
+    /* margin-right: 100%; */
 }
 
-.view-container .table tbody tr{
-	border-bottom: 1px solid black;
+.loading {
+    position: absolute;
+    padding-top: 20%;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.797);
+    height: 100%;
 }
 
-.view-container .table tbody tr:last-child{
-	border-bottom: none;
+.view-container .table tbody tr td {
+    color: black;
+    padding: 10px;
+    border-right: 1px solid rgb(80, 77, 77);
+    text-align: center;
 }
 
-.view-container .table tbody tr:hover{
-	background-color: #f1f1eb;
+.view-container .table tbody tr {
+    border-bottom: 1px solid black;
+}
 
+.view-container .table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.view-container .table tbody tr:hover {
+    background-color: #f1f1eb;
 }
 
 .view-container .table tbody tr td:last-child,
-.view-container .table thead tr th:last-child{
-	border-right:none ;
+.view-container .table thead tr th:last-child {
+    border-right: none;
 }
-
 
 
 /*RESPONSIVE */
-@media (max-width: 992px)
-{
-	.view-container .table{
-		width: auto;
-	}
 
-	.navigation{
-		left: -300px;
-	}
-
-	.navigation{
-		width: 100%;
-		z-index: 1000;
-		left: -100%;
-	}
-
-	.navigation.active{
-		left: 0;
-		width: 300px;
-	}
-
-	.main{
-		width: 100%;
-		left: 0;
-	}
-
-	.main.active{
-		width: calc(100% - 300px);		
-		left: 300px;
-	}
-
-	.cardBox{
-		grid-template-columns: repeat(2, 1fr);		
-	}
-
-}
-.main .topbar .schoolinfo{
-	position: relative;
-	text-align: center;	
-}
-.main .topbar .schoolinfo h1 {	
-	color: white;		
-
-}
-.main .topbar .schoolinfo p{	
-	color: white;	
-
-}
-@media( max-width:480px ){		
-	.view-container .table{
-		width: auto;	
-	}
-	.container{
-		height: 100vh;
-		width: 100%;
-	}
-	.navigation{
-		width: 100%;
-		z-index: 1000;
-		left: -100%;
-	}
-
-	.navigation.active{
-		width: 100%;
-		left: 0;
-	}
-
-	.toggle.active{
-		position: fixed;
-		z-index: 1000000;
-		right: 0;
-		left: initial;
-	}
-
-	.toggle.active::before{
-		 color: #fff;
-	}
-
-	.main, .main.active{
-		width: 100%;
-		left: 0;
-	}
-	.main .topbar .schoolinfo{		
-		position: relative;
-		/* border: 1px solid red; */
-		margin-top: 2%;
-	}
-	.main .topbar .schoolinfo h1 {
-		font-size: 20px;
-		color: white;		
-
-	}
-	.main .topbar .schoolinfo p{
-		font-size:12px;
-		color: white;		
-	}
-
-
-	
-	
+@media (max-width: 992px) {
+    .view-container table {
+        width: auto;
+    }
+    .navigation {
+        left: -300px;
+    }
+    .navigation {
+        width: 100%;
+        z-index: 1000;
+        left: -100%;
+    }
+    .navigation.active {
+        left: 0;
+        width: 300px;
+    }
+    .main {
+        width: 100%;
+        left: 0;
+    }
+    .main.active {
+        width: calc(100% - 300px);
+        left: 300px;
+    }
+    .cardBox {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .topbar {
+        margin-left: 0px;
+        width: 100%;
+    }
 }
 
+.main .topbar .schoolinfo {
+    position: relative;
+    text-align: center;
+}
+
+.main .topbar .schoolinfo h1 {
+    color: white;
+}
+
+.main .topbar .schoolinfo p {
+    color: white;
+}
+
+@media( max-width:480px) {
+    .view-container .table {
+        width: auto;
+        height: 100vh;
+    }
+    .container {
+        height: 100vh;
+        width: 100%;
+    }
+    .navigation {
+        width: 100%;
+        z-index: 1000;
+        left: -100%;
+    }
+    .navigation.active {
+        width: 100%;
+        left: 0;
+    }
+    .toggle.active {
+        position: fixed;
+        z-index: 1000000;
+        right: 0;
+        left: initial;
+    }
+    .toggle.active::before {
+        color: #fff;
+    }
+    .main,
+    .main.active {
+        width: 100%;
+        left: 0;
+    }
+    .main .topbar .schoolinfo {
+        position: relative;
+        /* border: 1px solid red; */
+        margin-top: 2%;
+    }
+    .main .topbar .schoolinfo h1 {
+        font-size: 20px;
+        color: white;
+    }
+    .main .topbar .schoolinfo p {
+        font-size: 12px;
+        color: white;
+    }
+}

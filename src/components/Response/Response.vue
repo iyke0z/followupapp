@@ -2,13 +2,10 @@
     <div class="container">   
         <nav-bar />
         <div class="main">
-         <div class="topbar">
-           <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>
-
             <center style="margin-top:5%; margin-bottom:2%">
+                <div class="loading" v-if="isLoading">
+                    <loading />
+                </div>
                 <button @click="toggleCrud">
                     Add New Response <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
@@ -35,7 +32,8 @@
             </center>
         </section>
         <section>
-            <center>                
+            <center>   
+            <div class="tableDiv">
                 <table id="all-response">
                     <thead>
                         <tr>
@@ -63,6 +61,7 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>             
             </center>
 
         </section>                                       
@@ -76,14 +75,16 @@ import NavBar from '../../Navigation.vue'
 import User from '../../components/Api/User'
 import Response from '../../components/Api/Response'
 import Swal from 'sweetalert2'
+import Loading from '@/components/Loading.vue'
 
 export default {
-    components:{NavBar},
+    components:{NavBar, Loading},
     data() {
         return {
             filled:false,
             updateMode:false,
             crud:false,
+            isLoading:false,
             user:null,
             tableKey:0,
             response:{
@@ -128,17 +129,21 @@ export default {
             });
         },
         allResponse(){
+            this.isLoading = true
             Response.allResponse().then((result) => {
                 this.allresponse = result.data[0]
                 this.followuplevel = result.data[1]
                 this.tableKey++               
-                this.datatable()                                 
+                this.datatable()   
+                this.isLoading = false                              
             })
         }, 
         addResponse(){
+            this.isLoading = true
             Response.createResponse(this.response).then((result) => {
                   this.allResponse()
                   this.toggleCrud()
+                  this.isLoading = false
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -148,6 +153,7 @@ export default {
                     timer: 3000
                 })
             }).catch((err) => {
+                this.isLoading = false
                  Swal.fire({
                     position: 'top-end',
                     icon: 'error',
@@ -159,8 +165,10 @@ export default {
             });
         },
         deleteResponse(response){
+            this.isLoading = true
              Response.deleteResponse(response).then((result) => { 
                   this.allResponse()
+                  this.isLoading = false
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -170,6 +178,7 @@ export default {
                     timer: 3000
                 })
             }).catch((err) => {
+                this.isLoading = false
                  Swal.fire({
                     position: 'top-end',
                     icon: 'error',
@@ -189,9 +198,11 @@ export default {
         },
 
         updateResponse(){
+            this.isLoading = true
             Response.updateResponse(this.response).then((result) => {
                 this.allResponse()
                 this.toggleCrud()
+                this.isLoading = false
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -201,6 +212,7 @@ export default {
                     timer: 3000
                 })    
             }).catch((err) => {
+                this.isLoading = false
                 Swal.fire({
                     position: 'top-end',
                     icon: 'error',
@@ -212,9 +224,11 @@ export default {
             });
         },
         getAuth(){
+            this.isLoading = true
             User.auth().then((result)=>{                
                 this.user = result.data 
                 this.allResponse()
+                this.isLoading = false
             }).catch(()=>{
 				this.$router.push('/')
 			})

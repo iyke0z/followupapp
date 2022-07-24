@@ -1,14 +1,12 @@
 <template>
     <div class="container">   
         <nav-bar />
-        <div class="main">
-         <div class="topbar">
-            <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>   
+        <div class="main">  
         <center>
         <br><br>
+        <div class="loading" v-if="isLoading">
+                <loading />
+            </div>
             <h3>Assign Followup Members to New Members</h3>
         </center>                                             
         <section  style="margin-top:5%">
@@ -27,7 +25,7 @@
             </form>
         </section>
         <section>
-            <div>
+            <div class="tableDiv">
                 <table id="all-assign">
                     <thead>
                         <tr>
@@ -65,8 +63,9 @@ import NavBar from '../../Navigation.vue'
 import User from '../../components/Api/User'
 import Assign from '../../components/Api/AssignMember'
 import Swal from 'sweetalert2'
+import Loading from '@/components/Loading.vue'
 export default {
-    components:{NavBar},
+    components:{NavBar, Loading},
     data() {
         return {
             assignuser: null,
@@ -101,16 +100,20 @@ export default {
             });
         },
         getMembers(){
+            this.isLoading = true
             Assign.getUnassignedMembers().then((result) => {
                 this.members = result.data
                 this.datatable()
+                this.isLoading = false
             })
         },
          getAuth(){
+            this.isLoading = true
             User.auth().then((result)=>{
                 this.user = result.data                                  
                 this.getUsers()
                 this.getMembers()
+                this.isLoading = false
             }).catch(()=>{
 				this.$router.push('/')
 			})
@@ -123,7 +126,9 @@ export default {
         },
 
         submitassign(){
+            this.isLoading = true
             if(this.assignuser == null){
+                this.isLoading = false
                 Swal.fire({
                         position: 'top-end',
                         icon: 'error',
@@ -133,7 +138,9 @@ export default {
                         timer: 3000
                     })   
             }else{
+                this.isLoading = true
                 Assign.assignMember(this.assignMember).then((result) => {
+                    this.isLoading = false
                     Swal.fire({
                         position: 'top-end',
                         icon: 'success',

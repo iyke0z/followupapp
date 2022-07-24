@@ -1,27 +1,26 @@
 <template>
     <div class="container">   
         <nav-bar />
-        <div class="main">
-            <div class="topbar">
-                <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>   
-
-            <div style="margin-top:5%" >
-                <center><h1>                        
+        <div class="main">        
+            <div style="margin-top:5%" >             
+                <center>
+                <div class="loading" v-if="isLoading">
+                <loading />
+            </div>  
+                <h1>            
+                      
                     Members Assigned To Call
                 </h1></center>
 
-                <div v-if="assigned == null">
+                <div v-if="assigned == null || assigned.length == 0">
                     <center>
                         <h1 style="color:red"> 
                             <i class="fa fa-times-circle-o" aria-hidden="true"></i>
                         </h1>
                         <p>Currently have no members to follow up</p>
                     </center>
-                </div>
-
+                </div>     
+                <div class="tableDiv">
                 <table :key="tableKey" id="myTable" v-if="assigned != null">
                     <thead>
                         <tr>
@@ -43,6 +42,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>           
             </div>
 
         </div>
@@ -53,12 +53,14 @@
 import NavBar from '../Navigation.vue'
 import User from '../components/Api/User'
 import Followup from './Api/Followup'
+import Loading from '@/components/Loading.vue'
 export default {
-    components:{NavBar},
+    components:{NavBar, Loading},
     data() {
         return {
             assigned:null,
-            user:null
+            user:null,
+            isLoading:false,
         }
     },    
     methods: {  
@@ -81,17 +83,21 @@ export default {
 			main.classList.toggle('active')			
 		},  
         
-        async getAssigned(){            
+        async getAssigned(){  
+            this.isLoading = true          
             await Followup.getAssigned().then((result) => {
                 this.assigned = result.data
                 this.datatable()
+                this.isLoading = false
             })            
         },
         
         getAuth(){
+            this.isLoading = true          
             User.auth().then((result)=>{
                 this.user = result.data                                  
-                this.getAssigned()                
+                this.getAssigned()   
+                this.isLoading = false             
             }).catch(()=>{
 				this.$router.push('/')
 			})

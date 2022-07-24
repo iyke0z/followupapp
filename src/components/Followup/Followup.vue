@@ -2,12 +2,11 @@
     <div class="container">   
         <nav-bar />
         <div class="main">
-         <div class="topbar">
-            <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>
+
             <center style="margin-top:5%">
+            <div class="loading" v-if="isLoading">
+                <loading />
+            </div>
             <h1>Follow Up</h1> <br><br>
                 <div>
                     <label for="">Select Assigned Member</label>
@@ -66,6 +65,7 @@ export default {
         return {
             followup:{levelid:null, memberid:null, responseid:null, response:null, details:null},
             user:null,
+            isLoading:false,
             followuplevel:null,
             assigned:null,
             response:null
@@ -88,13 +88,16 @@ export default {
         },
 
         getResponse(){
+            this.followup.responseid = null
             Followup.getResponse(this.followup.levelid).then((result) => {
                 this.response = result.data                
             })
         },
 
         followupmember(){
+            this.isLoading = true
             if(this.followup.memberid == null || this.followup.levelid == null || this.followup.responseid == null || this.followup.response == null){
+                this.isLoading = false
                  Swal.fire({
                             position: 'top-end',
                             icon: 'error',
@@ -105,19 +108,21 @@ export default {
                         })  
             }else{
                 Followup.followup(this.followup).then((result) => {
+                    this.isLoading = false
                         Swal.fire({
                             position: 'top-end',
-                            icon: 'Sucess',
+                            icon: 'success',
                             title: 'Follow Up Data Stored Successfully',
                             customClass: 'Swal-wide',
                             showConfirmButton: false,
                             timer: 3000
                         })  
                 }).catch((err) => {
+                    this.isLoading = false
                     Swal.fire({
                             position: 'top-end',
                             icon: 'error',
-                            title: 'Error Storing Followup Data',
+                            title: err.response.data.message,
                             customClass: 'Swal-wide',
                             showConfirmButton: false,
                             timer: 3000
@@ -127,10 +132,11 @@ export default {
         },
 
         getAuth(){
+            this.isLoading = true
             User.auth().then((result)=>{
                 this.user = result.data
                 this.getLevels() 
-                                                 
+                this.isLoading = false           
             }).catch(()=>{
 				this.$router.push('/')
 			})

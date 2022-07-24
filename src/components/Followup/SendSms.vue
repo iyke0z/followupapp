@@ -2,11 +2,6 @@
     <div class="container">   
         <nav-bar />
         <div class="main">
-         <div class="topbar">
-            <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>   
 
             <center style="margin-top:5%">
                 <h1>SMS ACTION</h1>

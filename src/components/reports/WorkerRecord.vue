@@ -1,36 +1,32 @@
 <template>
-    <div class="view-container">
+    <div class="view-container">    
+    <div class="tableDiv">
         <table id="myTable" class="table">
             <thead>
                 <tr>
-                    <th>Week</th>
-                    <th>Total Sales</th>                    
-                    <th>Total Cost</th>
-                    <th>Total Expenditure</th>                    
-                    <th>Total Purchase</th>
-                    <th>Profit</th>
+                    <th>Name</th>
+                    <th>Count</th>                                        
                 </tr>
             </thead>
             <tbody>
-               <tr>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
-                <td>...</td>
+               <tr> 
+                    <td>{{ report.name }}</td>
+                    <td>{{ report.count }}</td>
                </tr>
                
             </tbody>
-        </table>
+        </table>        
+    </div>
     </div>
 </template>
 <script>
 
 export default {
     props:{
-        allExpenditures:null
+        title:null,
+        report:null
     },
+    
      methods: {
         padId(id){
             return String(id).padStart(3,'0')
@@ -39,6 +35,7 @@ export default {
         datatable(){            
             $(function() {
                  $('#myTable').DataTable({
+                    "bDestroy": true,
                     pageLength: 5,
                     lengthMenu: [[5,10,20], [5, 10, 20]]
                 });

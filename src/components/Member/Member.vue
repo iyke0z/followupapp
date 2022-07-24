@@ -1,13 +1,12 @@
 <template>
     <div class="container">   
         <nav-bar />
-        <div class="main">
-         <div class="topbar">
-            <div class="toggle" @click="toggleMenu"></div>				
-                <h4 style="color:black">SLC FOLLOWUP APP</h4>
-                <h4 style="color:black"></h4>
-            </div>    
+        <div class="main">       
+    
             <center style="margin-top:5%; margin-bottom:2%">
+                <div class="loading" v-if="isLoading">
+                    <loading />
+                </div>
                 <button @click="toggleCrud">
                     Add New Member <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
@@ -50,7 +49,9 @@
             </center>
         </section>
         <section>
-            <center>                
+            <center>    
+                <div class="tableDiv">
+            
                 <table id="all-members">
                     <thead>
                         <tr>
@@ -95,6 +96,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </center>
 
         </section>                                      
@@ -109,15 +111,17 @@ import NavBar from '../../Navigation.vue'
 import Member from '../../components/Api/Member'
 import User from '../../components/Api/User'
 import Area from '@/components/Api/Area'
+import Loading from '@/components/Loading.vue'
 import Swal from 'sweetalert2'
 export default {
-    components:{NavBar},
+    components:{NavBar, Loading},
     data() {
         return {
             filled:false,
             updateMode:false,
             crud:false,
             user:null,
+            isLoading:false,
             tableKey:0,
             member:{
                 id:null,
@@ -166,16 +170,20 @@ export default {
             });
         },
         allMembers(){
+            this.isLoading = true
             Member.allMembers().then((result) => {
                 this.allmembers = result.data   
                 this.tableKey++               
-                this.datatable()                                 
+                this.datatable() 
+                this.isLoading = false                                
             })
         }, 
         addMember(){
+            this.isLoading = true
             Member.createMember(this.member).then((result) => {
                   this.allMembers()
                   this.toggleCrud()
+                  this.isLoading = false
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -185,6 +193,7 @@ export default {
                     timer: 3000
                 })
             }).catch((err) => {
+                this.isLoading = false
                  Swal.fire({
                     position: 'top-end',
                     icon: 'error',
@@ -196,8 +205,10 @@ export default {
             });
         },
         deleteMember(member){
+            this.isLoading = true
              Member.deleteMember(member).then((result) => {                 
                   this.allMembers()
+                  this.isLoading = false
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -207,6 +218,7 @@ export default {
                     timer: 3000
                 })
             }).catch((err) => {
+                this.isLoading = false
                  Swal.fire({
                     position: 'top-end',
                     icon: 'error',
@@ -227,9 +239,11 @@ export default {
             this.crud = true
         },
         updateUser(){
+            this.isLoading = true
             Member.updateMember(this.member).then((result) => {
                 this.allMembers()
                 this.toggleCrud()
+                this.isLoading = false
                   Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -239,6 +253,7 @@ export default {
                     timer: 3000
                 })    
             }).catch((err) => {
+                this.isLoading = false
                 Swal.fire({
                     position: 'top-end',
                     icon: 'error',
@@ -250,17 +265,21 @@ export default {
             });
         },
         allarea(){
+            this.isLoading = true
             Area.allAreas().then((result) => {
                 this.allareas = result.data   
                 this.tableKey++               
-                this.datatable()                                 
+                this.datatable()    
+                this.isLoading = false                             
             })
         }, 
         getAuth(){
+            this.isLoading = true
             User.auth().then((result)=>{                
                 this.user = result.data 
                 this.allarea()
                 this.allMembers()
+                this.isLoading = false
             }).catch(()=>{
 				this.$router.push('/')
 			})

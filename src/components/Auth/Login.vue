@@ -1,5 +1,10 @@
 <template>
     <div class="container">
+		<center>
+			<div class="loading" v-if="isLoading">
+                <loading />
+            </div>
+		</center>
 		<div class="card">
 			<div class="inner-box" id="card">
 				<div class="card-front">
@@ -10,7 +15,7 @@
 						<input type="email" @input="checkInput" v-model="logindata.email" class="input-box" name="email" placeholder="Your Email Id" required> 
 						<input type="password" @input="checkInput" @keyup.enter="login" v-model="logindata.password" class="input-box" name="password" placeholder="Your Password" required>
 
-						<button class="submit-btn" :disabled="!filled"  @click="login">Submit</button>
+						<button type="submit" class="submit-btn" :disabled="!filled"  @click.prevent="login">Submit</button>
 						<center v-if='!filled'>
 							<small>
 								<p style="color:red">fields are empty</p>
@@ -36,6 +41,7 @@ export default {
 				email:null,
 				password:null,
 			},
+			isLoading:false,
 			message:null
 		}
 	},
@@ -49,12 +55,15 @@ export default {
 			}
 		},
         login(){
+			// this.isLoading = true
 			User.login(this.logindata).then((result) =>{
 				localStorage.setItem("token", result.data['access_token'])					
+				this.isLoading = false			
 				window.location.href = 'dashboard'				
 				User.auth().then((result)=>{
 					localStorage.setItem("auth", "true")											
-				})				
+				})	
+				
 			}
 			).catch((err) => {
 				if(err.response.data.errors['email']){
@@ -65,6 +74,26 @@ export default {
 			});
         }
     },
+
+	computed:{
+		email(){
+			return this.logindata.email
+		},
+
+		password(){
+			return this.logindata.password
+		}
+	},
+
+	watch:{
+		email(){
+			this.checkInput()
+		},
+
+		password(){
+			this.checkInput()
+		}
+	}
         
     
 }
