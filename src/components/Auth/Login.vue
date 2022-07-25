@@ -15,7 +15,7 @@
 						<input type="email" @input="checkInput" v-model="logindata.email" class="input-box" name="email" placeholder="Your Email Id" required> 
 						<input type="password" @input="checkInput" @keyup.enter="login" v-model="logindata.password" class="input-box" name="password" placeholder="Your Password" required>
 
-						<button type="submit" class="submit-btn" :disabled="!filled"  @click.prevent="login">Submit</button>
+						<button type="submit" class="submit-btn" :disabled="!filled"  v-on:click="login">Submit</button>
 						<center v-if='!filled'>
 							<small>
 								<p style="color:red">fields are empty</p>
@@ -55,10 +55,13 @@ export default {
 			}
 		},
         login(){
+			// alert('clicked')
 			// this.isLoading = true
-			User.login(this.logindata).then((result) =>{
+			User.login(this.logindata).then((result)=> {
+				// alert(localStorage.getItem('token'))
 				localStorage.setItem("token", result.data['access_token'])					
 				this.isLoading = false			
+				// this.$router.push('dashboard')
 				window.location.href = 'dashboard'				
 				User.auth().then((result)=>{
 					localStorage.setItem("auth", "true")											
@@ -72,6 +75,7 @@ export default {
 					this.message = err.response.data.errors[0][0]
 				}
 			});
+
         }
     },
 
