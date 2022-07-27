@@ -40,7 +40,7 @@ body {
   border-style: solid;
   border-width: 1vmin;
   font-size: 1.5rem;
-  width: 20%;
+  width: 50%;
     background: black;
   --charge: hsl(var(--h, 0), 80%, 50%);
   -o-border-image: conic-gradient(var(--charge) var(--a), transparent calc(var(--a) + 0.5deg)) 30;

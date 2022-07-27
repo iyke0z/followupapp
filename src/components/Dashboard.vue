@@ -1,7 +1,7 @@
 <template>
     <div class="container">   
         <nav-bar />
-        <div class="main">        
+        <div class="main">                
             <div style="margin-top:5%" >             
                 <center>
                 <div class="loading" v-if="isLoading">

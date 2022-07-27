@@ -56,9 +56,8 @@ export default {
 		},
         login(){
 			// alert('clicked')
-			// this.isLoading = true
+				
 			User.login(this.logindata).then((result)=> {
-				// alert(localStorage.getItem('token'))
 				localStorage.setItem("token", result.data['access_token'])					
 				this.isLoading = false			
 				// this.$router.push('dashboard')
